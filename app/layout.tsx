@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   // Reemplaza esto con tu link real de Vercel cuando lo tengas (ej: https://impostor-game.vercel.app)
   // Si no tienes el link aún, puedes dejar localhost o borrar la línea metadataBase temporalmente
-  metadataBase: new URL('https://el-impostor-juego.vercel.app'), 
+  metadataBase: new URL('https://juego-impostor.vercel.app/'), 
   
   title: "El Impostor - Juego de Mesa Online",
   description: "¡Juega con tus amigos! Descubre quién es el impostor antes de que sea tarde. Sala privada, votaciones y diversión.",
