@@ -54,13 +54,19 @@ export default function JuegoPage() {
       if (data) {
         setSala(data);
         if (data.estado !== "VOTANDO") setYaVote(false);
+        
+        // SEGURIDAD: Si me echaron (mi nombre ya no está en la lista), me saca
+        if (data.jugadores && !data.jugadores[nombre]) {
+            alert("Has sido expulsado de la sala por el anfitrión.");
+            router.push("/");
+        }
       } else {
         setMensaje("La sala no existe o fue borrada.");
       }
     });
 
     return () => unsub();
-  }, [codigo, nombre]);
+  }, [codigo, nombre, router]);
 
   // --- LÓGICA DE JUEGO Y VOTACIÓN ---
 
@@ -70,17 +76,17 @@ export default function JuegoPage() {
   // @ts-ignore
   const estoyVivo = sala?.jugadores?.[nombre]?.vivo !== false;
 
-  // A. Empezar Partida (NUEVO: Elige quién arranca)
+  // A. Empezar Partida (Elige quién arranca y lo guarda en Firebase)
   const empezarPartida = () => {
     if (listaJugadores.length < 3) return alert("Se necesitan al menos 3 jugadores");
 
     const lugarSecreto = PALABRAS[Math.floor(Math.random() * PALABRAS.length)];
     
-    // Elegir Impostor
+    // 1. Elegir Impostor
     const impostorIndex = Math.floor(Math.random() * listaJugadores.length);
     const nombreImpostor = (listaJugadores[impostorIndex] as any).nombre;
 
-    // NUEVO: Elegir Jugador Inicial (Quién empieza hablando)
+    // 2. Elegir Jugador Inicial (Quién empieza hablando)
     const inicialIndex = Math.floor(Math.random() * listaJugadores.length);
     const nombreJugadorInicial = (listaJugadores[inicialIndex] as any).nombre;
 
@@ -94,7 +100,7 @@ export default function JuegoPage() {
     updates["estado"] = "JUGANDO";
     updates["lugar"] = lugarSecreto;
     updates["impostor"] = nombreImpostor;
-    updates["jugadorInicial"] = nombreJugadorInicial; // Guardamos quién empieza
+    updates["jugadorInicial"] = nombreJugadorInicial; // ¡IMPORTANTE! Esto lo ven todos
     updates["ganador"] = "";
 
     update(ref(db, `salas/${codigo}`), updates);
@@ -184,7 +190,7 @@ export default function JuegoPage() {
       lugar: "",
       impostor: "",
       ganador: "",
-      jugadorInicial: ""
+      jugadorInicial: "" // Borramos quién empezaba para la próxima ronda
     });
   };
 
@@ -192,6 +198,13 @@ export default function JuegoPage() {
     if (confirm("¿Seguro que quieres abandonar la partida?")) {
       await remove(ref(db, `salas/${codigo}/jugadores/${nombre}`));
       router.push("/");
+    }
+  };
+
+  // FUNCIÓN: Expulsar Jugador (Solo Admin)
+  const echarJugador = async (jugadorAEchar: string) => {
+    if (confirm(`¿Quieres expulsar a ${jugadorAEchar} de la sala?`)) {
+        await remove(ref(db, `salas/${codigo}/jugadores/${jugadorAEchar}`));
     }
   };
 
@@ -258,11 +271,24 @@ export default function JuegoPage() {
             </h3>
             <ul className="space-y-2">
               {listaJugadores.map((j: any) => (
-                <li key={j.nombre} className="flex items-center gap-2 font-bold text-black">
-                   <div className={`w-8 h-8 flex items-center justify-center border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${j.nombre === sala.host ? 'bg-yellow-400' : 'bg-white'}`}>
-                     {j.nombre === sala.host ? "👑" : "👤"}
+                <li key={j.nombre} className="flex items-center justify-between font-bold text-black border-b border-gray-200 last:border-0 pb-1">
+                   <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 flex items-center justify-center border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${j.nombre === sala.host ? 'bg-yellow-400' : 'bg-white'}`}>
+                            {j.nombre === sala.host ? "👑" : "👤"}
+                        </div>
+                        <span>{j.nombre}</span>
                    </div>
-                   <span>{j.nombre}</span>
+                   
+                   {/* BOTÓN DE EXPULSAR (SOLO ADMIN) */}
+                   {soyAdmin && j.nombre !== nombre && (
+                       <button 
+                           onClick={() => echarJugador(j.nombre)}
+                           className="bg-red-100 hover:bg-red-200 text-red-600 border border-red-300 rounded px-2 py-0.5 text-xs font-bold"
+                           title="Expulsar jugador"
+                       >
+                           🚫 Echar
+                       </button>
+                   )}
                 </li>
               ))}
             </ul>
@@ -322,7 +348,7 @@ export default function JuegoPage() {
             </div>
           )}
 
-          {/* NUEVO: AVISO DE QUIÉN EMPIEZA */}
+          {/* AVISO DE QUIÉN EMPIEZA (Visible para TODOS porque lee sala.jugadorInicial) */}
           {sala.jugadorInicial && (
               <div className="bg-yellow-200 border-2 border-black p-3 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1 mx-4">
                   <p className="text-xs font-bold text-black uppercase mb-1">🎲 Empieza preguntando:</p>
