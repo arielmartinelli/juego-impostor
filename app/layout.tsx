@@ -2,18 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-// Agrega esta línea si Vercel te pide una URL base (opcional pero recomendado)
-// Reemplaza con tu dominio real de Vercel cuando lo tengas
-export const metadata: Metadata = {
-  metadataBase: new URL('https://el-impostor-juego.vercel.app'), // CAMBIA ESTO POR TU URL REAL
-  title: "El Impostor - Juego de Mesa Online",
-  description: "¡Juega con tus amigos! Descubre quién es el impostor antes de que sea tarde. Sala privada, votaciones y diversión.",
-  openGraph: {
-    title: "El Impostor - Juego de Mesa Online",
-    description: "Únete a la partida y descubre al mentiroso.",
-  },
-};
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,9 +12,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// AQUÍ ESTÁ LA MAGIA PARA WHATSAPP Y REDES SOCIALES
 export const metadata: Metadata = {
-  title: "El Impostor",
-  description: "Juego de mesa 3D",
+  // Reemplaza esto con tu link real de Vercel cuando lo tengas (ej: https://impostor-game.vercel.app)
+  // Si no tienes el link aún, puedes dejar localhost o borrar la línea metadataBase temporalmente
+  metadataBase: new URL('https://el-impostor-juego.vercel.app'), 
+  
+  title: "El Impostor - Juego de Mesa Online",
+  description: "¡Juega con tus amigos! Descubre quién es el impostor antes de que sea tarde. Sala privada, votaciones y diversión.",
+  
+  // Esto hace que salga la foto grande en WhatsApp/Twitter
+  openGraph: {
+    title: "El Impostor - Juego de Mesa Online",
+    description: "Únete a la partida y descubre al mentiroso.",
+    // Next.js buscará automáticamente tu archivo opengraph-image.png en la carpeta app
+  },
 };
 
 export default function RootLayout({
@@ -49,16 +49,15 @@ export default function RootLayout({
         </header>
 
         {/* CONTENEDOR TIPO TABLERO (WHITEBOARD) */}
-        {/* Ajustado a max-w-2xl en pantallas grandes para que se vea compacto */}
         <main className="game-board-container w-full max-w-md md:max-w-lg lg:max-w-2xl p-8 relative bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             
-            {/* Tornillos decorativos en las esquinas */}
+            {/* Tornillos decorativos */}
             <div className="absolute top-4 left-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
             <div className="absolute top-4 right-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
             <div className="absolute bottom-4 left-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
             <div className="absolute bottom-4 right-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
 
-            {/* Aquí se renderiza tu page.tsx */}
+            {/* Aquí se renderiza tu juego */}
             <div className="w-full h-full relative z-10">
               {children}
             </div>
