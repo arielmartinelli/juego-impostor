@@ -6,9 +6,23 @@ import { db } from "../../firebase"; // Ajustamos la ruta para salir dos carpeta
 import { ref, onValue, update } from "firebase/database";
 
 // Lugares posibles para el juego
-const LUGARES = [
+const PALABRAS = [
   "Hospital", "Playa", "Escuela", "Submarino", "Estación Espacial", 
-  "Cine", "Supermercado", "Banco", "Avión", "Circo"
+    "Cine", "Supermercado", "Banco", "Avión", "Circo", 
+    "Cementerio", "Castillo Medieval", "Pirámide de Egipto", "Polo Norte", "Cárcel", 
+    "Gimnasio", "Biblioteca", "Restaurante de Sushi", "Volcán", "Parque de Diversiones",
+    "Microondas", "Sartén", "Inodoro", "Guitarra", "Computadora", 
+    "Zapato", "Reloj", "Paraguas", "Cepillo de Dientes", "Control Remoto", 
+    "Papel Higiénico", "Espejo", "Licuadora", "Escoba", "Almohada", 
+    "Bicicleta", "Cuchara", "Llaves", "Calcetín", "Gafas de Sol",
+    "Lionel Messi", "Shakira", "Bob Esponja", "Spider-Man", "Batman", 
+    "Mickey Mouse", "Cristiano Ronaldo", "Harry Potter", "Goku", "Taylor Swift", 
+    "La Roca", "Barbie", "Mario Bros", "El Chavo del 8", "Darth Vader", 
+    "Pikachu", "Iron Man", "Bad Bunny", "Homero Simpson", "Will Smith",
+    "Jirafa", "Elefante", "Tiburón", "Gato", "Perro", 
+    "Pingüino", "T-Rex", "León", "Gallina", "Mosquito", 
+    "Canguro", "Oso Panda", "Delfín", "Cocodrilo", "Murciélago", 
+    "Unicornio", "Hormiga", "Ballena", "Tortuga", "Lobo"
 ];
 
 export default function JuegoPage() {
@@ -51,7 +65,7 @@ export default function JuegoPage() {
     if (jugadoresArr.length < 3) return alert("Se necesitan al menos 3 jugadores");
 
     // Elegir lugar e impostor al azar
-    const lugarSecreto = LUGARES[Math.floor(Math.random() * LUGARES.length)];
+    const lugarSecreto = PALABRAS[Math.floor(Math.random() * PALABRAS.length)];
     const impostorIndex = Math.floor(Math.random() * jugadoresArr.length);
     const nombreImpostor = (jugadoresArr[impostorIndex] as any).nombre;
 
@@ -129,12 +143,12 @@ export default function JuegoPage() {
               <>
                 <div className="text-6xl mb-4">🤫</div>
                 <h2 className="text-4xl font-black text-red-500 mb-2">IMPOSTOR</h2>
-                <p className="text-red-200">¡No sabes dónde están! Engaña a todos.</p>
+                <p className="text-red-200">¡No sabes que palabra es! Engaña a todos.</p>
               </>
             ) : (
               <>
                 <div className="text-6xl mb-4">📍</div>
-                <h2 className="text-xl text-blue-300 uppercase tracking-widest mb-1">Estamos en:</h2>
+                <h2 className="text-xl text-blue-300 uppercase tracking-widest mb-1">LLa palabar es:</h2>
                 <p className="text-4xl font-black text-white">{sala.lugar}</p>
               </>
             )}
