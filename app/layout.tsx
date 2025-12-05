@@ -2,6 +2,18 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+// Agrega esta línea si Vercel te pide una URL base (opcional pero recomendado)
+// Reemplaza con tu dominio real de Vercel cuando lo tengas
+export const metadata: Metadata = {
+  metadataBase: new URL('https://el-impostor-juego.vercel.app'), // CAMBIA ESTO POR TU URL REAL
+  title: "El Impostor - Juego de Mesa Online",
+  description: "¡Juega con tus amigos! Descubre quién es el impostor antes de que sea tarde. Sala privada, votaciones y diversión.",
+  openGraph: {
+    title: "El Impostor - Juego de Mesa Online",
+    description: "Únete a la partida y descubre al mentiroso.",
+  },
+};
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
