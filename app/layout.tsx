@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   // Cambia esto por tu link real cuando lo tengas, ej: 'https://juego-impostor.vercel.app'
   metadataBase: new URL('https://juego-impostor.vercel.app'), 
-  title: "El Impostor - Juego de Mesa",
+  title: "El Impostor - Juega con amigos",
   description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
   openGraph: {
     title: "El Impostor - Juego de Mesa",
