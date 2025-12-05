@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation"; // Agregamos useRouter
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { db } from "../../firebase"; 
-import { ref, onValue, update, remove } from "firebase/database"; // Agregamos remove
+import { ref, onValue, update, remove } from "firebase/database";
 
 // Lugares posibles para el juego
 const PALABRAS = [
@@ -26,7 +26,7 @@ const PALABRAS = [
 ];
 
 export default function JuegoPage() {
-  const router = useRouter(); // Hook para navegar
+  const router = useRouter(); 
   const params = useParams();
   const codigo = Array.isArray(params?.codigo) ? params.codigo[0] : params?.codigo;
   
@@ -35,7 +35,7 @@ export default function JuegoPage() {
 
   const [sala, setSala] = useState<any>(null);
   const [mensaje, setMensaje] = useState("Cargando...");
-  const [yaVote, setYaVote] = useState(false); // Estado local para saber si este usuario ya votó
+  const [yaVote, setYaVote] = useState(false);
 
   // 1. CONECTARSE A LA SALA
   useEffect(() => {
@@ -43,18 +43,16 @@ export default function JuegoPage() {
 
     const salaRef = ref(db, `salas/${codigo}`);
 
-    // Al unirse, nos aseguramos de tener la propiedad 'vivo' en true
     update(ref(db, `salas/${codigo}/jugadores/${nombre}`), {
       nombre: nombre,
       conectado: true,
-      vivo: true // Por defecto todos entran vivos
+      vivo: true 
     });
 
     const unsub = onValue(salaRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         setSala(data);
-        // Resetear el estado de "ya voté" si cambia el estado del juego a JUGANDO o ESPERANDO
         if (data.estado !== "VOTANDO") setYaVote(false);
       } else {
         setMensaje("La sala no existe o fue borrada.");
@@ -72,15 +70,21 @@ export default function JuegoPage() {
   // @ts-ignore
   const estoyVivo = sala?.jugadores?.[nombre]?.vivo !== false;
 
-  // A. Empezar Partida (Resetea vidas y votos)
+  // A. Empezar Partida (NUEVO: Elige quién arranca)
   const empezarPartida = () => {
     if (listaJugadores.length < 3) return alert("Se necesitan al menos 3 jugadores");
 
     const lugarSecreto = PALABRAS[Math.floor(Math.random() * PALABRAS.length)];
+    
+    // Elegir Impostor
     const impostorIndex = Math.floor(Math.random() * listaJugadores.length);
     const nombreImpostor = (listaJugadores[impostorIndex] as any).nombre;
 
-    // Reiniciamos a todos como vivos
+    // NUEVO: Elegir Jugador Inicial (Quién empieza hablando)
+    const inicialIndex = Math.floor(Math.random() * listaJugadores.length);
+    const nombreJugadorInicial = (listaJugadores[inicialIndex] as any).nombre;
+
+    // Reiniciamos a todos
     const updates: any = {};
     listaJugadores.forEach((j: any) => {
         updates[`jugadores/${j.nombre}/vivo`] = true;
@@ -90,14 +94,14 @@ export default function JuegoPage() {
     updates["estado"] = "JUGANDO";
     updates["lugar"] = lugarSecreto;
     updates["impostor"] = nombreImpostor;
+    updates["jugadorInicial"] = nombreJugadorInicial; // Guardamos quién empieza
     updates["ganador"] = "";
 
     update(ref(db, `salas/${codigo}`), updates);
   };
 
-  // B. Iniciar Fase de Votación (Solo Admin)
+  // B. Iniciar Fase de Votación
   const iniciarVotacion = () => {
-    // Resetear contadores de votos
     const updates: any = {};
     listaJugadores.forEach((j: any) => {
         updates[`jugadores/${j.nombre}/votos`] = 0;
@@ -118,21 +122,18 @@ export default function JuegoPage() {
     setYaVote(true);
   };
 
-  // D. Calcular Resultados (Efecto automático solo para el HOST)
+  // D. Calcular Resultados
   useEffect(() => {
     if (!sala || sala.estado !== "VOTANDO" || !soyAdmin) return;
 
-    // Contamos votos totales y jugadores vivos
     const jugadoresVivos = listaJugadores.filter((j: any) => j.vivo !== false);
     const votosTotalesEmitidos = listaJugadores.reduce((acc: number, j: any) => acc + (j.votos || 0), 0);
 
-    // Si todos los vivos han votado (o la mayoría suficiente), procesamos
-    // Nota: Simplificamos esperando que los votos totales igualen a los jugadores vivos que pueden votar
     if (votosTotalesEmitidos >= jugadoresVivos.length && jugadoresVivos.length > 0) {
-        setTimeout(() => procesarVotacion(), 1000); // Pequeño delay para dramatismo
+        setTimeout(() => procesarVotacion(), 1000); 
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sala, soyAdmin]); // Dependemos de sala para ver cambios en votos
+  }, [sala, soyAdmin]); 
 
   const procesarVotacion = () => {
     let masVotado: any = null;
@@ -153,30 +154,21 @@ export default function JuegoPage() {
     const updates: any = {};
 
     if (empate || !masVotado) {
-        // Si hay empate, nadie muere, seguimos jugando
         updates["estado"] = "JUGANDO";
     } else {
-        // Alguien fue expulsado
         const expulsadoEsImpostor = masVotado.nombre === sala.impostor;
 
         if (expulsadoEsImpostor) {
-            // 1. Ganaron los ciudadanos
             updates["estado"] = "TERMINADO";
             updates["ganador"] = "CIUDADANOS";
         } else {
-            // 2. El expulsado era inocente
             updates[`jugadores/${masVotado.nombre}/vivo`] = false;
-            
-            // Chequear condición de victoria del Impostor
-            // Contamos cuantos quedan vivos (restando al que acabamos de matar)
             const vivosRestantes = listaJugadores.filter((j: any) => j.vivo !== false && j.nombre !== masVotado.nombre).length;
             
             if (vivosRestantes <= 2) {
-                // Si quedan 2 (1 impostor + 1 inocente), gana el impostor matemáticamente
                 updates["estado"] = "TERMINADO";
                 updates["ganador"] = "IMPOSTOR";
             } else {
-                // Sigue el juego
                 updates["estado"] = "JUGANDO";
             }
         }
@@ -191,11 +183,11 @@ export default function JuegoPage() {
       estado: "ESPERANDO",
       lugar: "",
       impostor: "",
-      ganador: ""
+      ganador: "",
+      jugadorInicial: ""
     });
   };
 
-  // NUEVA FUNCIÓN: Salir de la partida
   const salirPartida = async () => {
     if (confirm("¿Seguro que quieres abandonar la partida?")) {
       await remove(ref(db, `salas/${codigo}/jugadores/${nombre}`));
@@ -203,7 +195,6 @@ export default function JuegoPage() {
     }
   };
 
-  // NUEVA FUNCIÓN: Anfitrión finaliza ronda manualmente
   const finalizarRondaManual = () => {
      if (confirm("¿Revelar roles y terminar esta ronda?")) {
         update(ref(db, `salas/${codigo}`), {
@@ -235,7 +226,6 @@ export default function JuegoPage() {
                 <div className={`w-3 h-3 rounded-full border border-black ${estoyVivo ? 'bg-green-500' : 'bg-red-600'}`}></div>
             </div>
             
-            {/* BOTÓN SALIR (NUEVO) */}
             <button 
                 onClick={salirPartida}
                 className="bg-red-500 hover:bg-red-600 text-white border-2 border-black px-3 py-1 rounded font-bold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all text-sm"
@@ -332,6 +322,16 @@ export default function JuegoPage() {
             </div>
           )}
 
+          {/* NUEVO: AVISO DE QUIÉN EMPIEZA */}
+          {sala.jugadorInicial && (
+              <div className="bg-yellow-200 border-2 border-black p-3 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rotate-1 mx-4">
+                  <p className="text-xs font-bold text-black uppercase mb-1">🎲 Empieza preguntando:</p>
+                  <p className="text-2xl font-black text-purple-700 uppercase tracking-wide">
+                      {sala.jugadorInicial}
+                  </p>
+              </div>
+          )}
+
           {/* LISTA DE JUGADORES VIVOS */}
           <div className="bg-white border-2 border-black p-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <p className="text-xs font-bold text-gray-400 uppercase mb-3">Sobrevivientes:</p>
@@ -353,7 +353,6 @@ export default function JuegoPage() {
                 🚨 Llamar a Votación
                 </button>
                 
-                {/* BOTÓN FINALIZAR RONDA (NUEVO) */}
                 <button 
                     onClick={finalizarRondaManual} 
                     className="w-full bg-gray-200 hover:bg-gray-300 text-black border-2 border-black py-2 rounded-xl font-bold text-sm uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-y-1 transition-all"
