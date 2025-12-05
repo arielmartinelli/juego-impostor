@@ -12,20 +12,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// AQUÍ ESTÁ LA MAGIA PARA WHATSAPP Y REDES SOCIALES
+// AQUÍ CONFIGURAMOS EL TÍTULO Y LA FOTO DE WHATSAPP
 export const metadata: Metadata = {
-  // Reemplaza esto con tu link real de Vercel cuando lo tengas (ej: https://impostor-game.vercel.app)
-  // Si no tienes el link aún, puedes dejar localhost o borrar la línea metadataBase temporalmente
-  metadataBase: new URL('https://juego-impostor.vercel.app/'), 
-  
-  title: "El Impostor - Juego de Mesa Online",
-  description: "¡Juega con tus amigos! Descubre quién es el impostor antes de que sea tarde. Sala privada, votaciones y diversión.",
-  
-  // Esto hace que salga la foto grande en WhatsApp/Twitter
+  // Cambia esto por tu link real cuando lo tengas, ej: 'https://juego-impostor.vercel.app'
+  metadataBase: new URL('https://juego-impostor.vercel.app'), 
+  title: "El Impostor - Juego de Mesa",
+  description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
   openGraph: {
-    title: "El Impostor - Juego de Mesa Online",
-    description: "Únete a la partida y descubre al mentiroso.",
-    // Next.js buscará automáticamente tu archivo opengraph-image.png en la carpeta app
+    title: "El Impostor - Juego de Mesa",
+    description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
+    // Next.js buscará automáticamente tu archivo opengraph-image.png
   },
 };
 
@@ -48,7 +44,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        {/* CONTENEDOR TIPO TABLERO (WHITEBOARD) */}
+        {/* CONTENEDOR TIPO TABLERO */}
         <main className="game-board-container w-full max-w-md md:max-w-lg lg:max-w-2xl p-8 relative bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             
             {/* Tornillos decorativos */}
@@ -57,7 +53,7 @@ export default function RootLayout({
             <div className="absolute bottom-4 left-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
             <div className="absolute bottom-4 right-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
 
-            {/* Aquí se renderiza tu juego */}
+            {/* AQUÍ SE MUESTRA TU JUEGO */}
             <div className="w-full h-full relative z-10">
               {children}
             </div>
