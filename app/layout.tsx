@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "El Impostor - Juega con amigos",
   description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
   openGraph: {
-    title: "El Impostor - Juego de Mesa",
+    title: "El Impostor - Juega con amigos",
     description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
     // Next.js buscará automáticamente tu archivo opengraph-image.png
   },
