@@ -1,8 +1,8 @@
-"use client"; // Esto es obligatorio para usar interactividad (botones)
+"use client"; 
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { db } from "./firebase"; // Importamos tu base de datos
+import { db } from "./firebase"; 
 import { ref, set, get, child } from "firebase/database";
 
 export default function Home() {
@@ -10,35 +10,27 @@ export default function Home() {
   const [nombre, setNombre] = useState("");
   const [salaId, setSalaId] = useState("");
 
-  // Función para CREAR una sala nueva
+  // LÓGICA ORIGINAL (NO SE TOCA)
   const crearSala = async () => {
     if (!nombre) return alert("¡Escribe tu nombre primero!");
-
-    // Generamos un código de 4 letras al azar (Ej: AE4X)
     const codigo = Math.random().toString(36).substring(2, 6).toUpperCase();
     
-    // Guardamos la sala en Firebase
     await set(ref(db, 'salas/' + codigo), {
       estado: 'ESPERANDO',
-      host: nombre, // El creador es el host
+      host: nombre, 
       jugadores: {
         [nombre]: { nombre: nombre, esHost: true }
       }
     });
-
-    // Nos vamos a la pantalla de juego (que crearemos luego)
     router.push(`/juego/${codigo}?nombre=${nombre}`);
   };
 
-  // Función para UNIRSE a una sala existente
   const unirseSala = async () => {
     if (!nombre || !salaId) return alert("Completa nombre y código");
-
     const salaRef = ref(db);
     const snapshot = await get(child(salaRef, `salas/${salaId.toUpperCase()}`));
 
     if (snapshot.exists()) {
-      // Si la sala existe, nos vamos para allá
       router.push(`/juego/${salaId.toUpperCase()}?nombre=${nombre}`);
     } else {
       alert("Esa sala no existe 😢");
@@ -46,48 +38,58 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <h1 className="text-4xl font-bold mb-8 text-yellow-400">🕵️ IMPOSTOR</h1>
+    // Ya no usamos min-h-screen ni bg-gray-900 porque el layout maneja el contenedor
+    <div className="flex flex-col items-center w-full space-y-6">
+      
+      {/* AQUÍ BORRÉ EL TÍTULO <h1> QUE TENÍAS.
+          Ahora el diseño es limpio dentro del tablero.
+      */}
 
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm space-y-4">
+      <div className="w-full space-y-5">
         
-        {/* Input Nombre */}
-        <div>
-          <label className="block text-sm mb-1">Tu Nombre</label>
+        {/* Input Nombre estilo Cartoon */}
+        <div className="space-y-2">
+          <label className="block text-lg font-bold text-black uppercase tracking-wide">
+            Tu Nombre
+          </label>
           <input 
             type="text" 
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
-            className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-yellow-500"
+            className="w-full p-3 rounded-xl bg-gray-50 border-4 border-black text-black font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:-translate-y-1 transition-all placeholder:text-gray-400"
             placeholder="Ej: Ariel"
           />
         </div>
 
-        <div className="border-t border-gray-700 my-4"></div>
+        {/* Separador dibujado */}
+        <div className="border-t-4 border-black border-dashed opacity-20 my-6"></div>
 
-        {/* Botón Crear */}
+        {/* Botón Crear Sala */}
         <button 
           onClick={crearSala}
-          className="w-full bg-green-600 hover:bg-green-500 py-3 rounded font-bold transition"
+          className="w-full bg-green-400 hover:bg-green-300 text-black border-4 border-black py-4 rounded-xl font-black text-xl uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
         >
           Crear Nueva Sala
         </button>
 
-        <p className="text-center text-gray-400 text-sm">- O -</p>
+        <div className="relative flex items-center justify-center py-2">
+            <span className="bg-white px-3 text-black font-bold text-sm border-2 border-black rounded-full z-10">O ENTRA A UNA</span>
+            <div className="absolute w-full border-b-2 border-black opacity-20"></div>
+        </div>
 
-        {/* Unirse */}
-        <div className="flex gap-2">
+        {/* Sección Unirse */}
+        <div className="flex flex-col sm:flex-row gap-3">
           <input 
             type="text" 
             value={salaId}
             onChange={(e) => setSalaId(e.target.value)}
-            className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-center uppercase"
+            className="w-full sm:w-2/3 p-3 rounded-xl bg-gray-50 border-4 border-black text-center uppercase font-mono text-lg font-bold placeholder:text-gray-400 focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
             placeholder="CÓDIGO"
             maxLength={4}
           />
           <button 
             onClick={unirseSala}
-            className="bg-blue-600 hover:bg-blue-500 px-4 rounded font-bold"
+            className="w-full sm:w-1/3 bg-blue-400 hover:bg-blue-300 text-black border-4 border-black rounded-xl font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all py-3 sm:py-0"
           >
             Entrar
           </button>
