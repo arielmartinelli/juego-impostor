@@ -2,7 +2,7 @@
 
 :root {
   /* Colores del "Tablero" */
-  --background: #4ade80; /* Un verde estilo tapete de cartas o fieltro */
+  --background: #4ade80; 
   --foreground: #171717;
   --card-bg: #ffffff;
   --border-color: #000000;
@@ -15,47 +15,42 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Mantenemos el soporte para modo oscuro si lo deseas, pero para un juego 
-   caricaturesco, suele ser mejor forzar colores vibrantes fijos. 
-   He dejado esto comentado por si prefieres ignorar el modo oscuro del sistema. */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} 
-*/
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   
-  /* Patrón de puntos para que parezca una mesa de juego */
+  /* Patrón de puntos */
   background-image: radial-gradient(#22c55e 2px, transparent 2px);
   background-size: 30px 30px;
-  min-height: 100vh;
-  overflow-x: hidden; /* Evitar scroll lateral */
+  
+  /* --- CAMBIOS CLAVE PARA QUE NO HAYA SCROLL --- */
+  height: 100vh;        /* Altura fija de pantalla */
+  overflow: hidden;     /* Ocultar barras de scroll globales */
+  display: flex;        /* Para centrar todo si es necesario */
+  flex-direction: column;
 }
-
-/* CLASES DE UTILIDAD PARA EL ESTILO "CARTOON" */
 
 /* El contenedor principal del juego (El Tablero) */
 .game-board-container {
   background-color: var(--card-bg);
-  border: 4px solid var(--border-color); /* Borde negro grueso */
-  border-radius: 24px; /* Bordes muy redondos */
-  /* Sombra dura (sin blur) para efecto 3D caricatura */
-  box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
+  border: 4px solid var(--border-color);
+  border-radius: 20px; /* Un poco menos redondeado para ganar espacio */
+  box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); /* Sombra un poco más chica */
+  
+  /* Lógica de Flexbox para llenar espacio */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Lo que sobre se recorta o scrollea ADENTRO */
 }
 
-/* Clase opcional para botones si quieres usarlos dentro de tu juego */
+/* Botón Cartoon */
 .btn-cartoon {
   border: 3px solid black;
-  box-shadow: 4px 4px 0px 0px black;
+  box-shadow: 3px 3px 0px 0px black;
   transition: all 0.1s;
 }
 .btn-cartoon:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px black;
+  box-shadow: 1px 1px 0px 0px black;
 }

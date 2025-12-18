@@ -10,7 +10,6 @@ export default function Home() {
   const [nombre, setNombre] = useState("");
   const [salaId, setSalaId] = useState("");
 
-  // LÓGICA ORIGINAL (NO SE TOCA)
   const crearSala = async () => {
     if (!nombre) return alert("¡Escribe tu nombre primero!");
     const codigo = Math.random().toString(36).substring(2, 6).toUpperCase();
@@ -26,76 +25,66 @@ export default function Home() {
   };
 
   const unirseSala = async () => {
-    if (!nombre || !salaId) return alert("Completa nombre y código");
+    if (!nombre || !salaId) return alert("Falta nombre o código");
     const salaRef = ref(db);
     const snapshot = await get(child(salaRef, `salas/${salaId.toUpperCase()}`));
 
     if (snapshot.exists()) {
       router.push(`/juego/${salaId.toUpperCase()}?nombre=${nombre}`);
     } else {
-      alert("Esa sala no existe 😢");
+      alert("Sala no encontrada");
     }
   };
 
   return (
-    // Ya no usamos min-h-screen ni bg-gray-900 porque el layout maneja el contenedor
-    <div className="flex flex-col items-center w-full space-y-6">
+    <div className="flex flex-col items-center justify-center w-full h-full space-y-4 sm:space-y-8">
       
-      {/* AQUÍ BORRÉ EL TÍTULO <h1> QUE TENÍAS.
-          Ahora el diseño es limpio dentro del tablero.
-      */}
-
-      <div className="w-full space-y-5">
-        
-        {/* Input Nombre estilo Cartoon */}
-        <div className="space-y-2">
-          <label className="block text-lg font-bold text-black uppercase tracking-wide">
-            Tu Nombre
-          </label>
-          <input 
-            type="text" 
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            className="w-full p-3 rounded-xl bg-gray-50 border-4 border-black text-black font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:-translate-y-1 transition-all placeholder:text-gray-400"
-            placeholder="Ej: Ariel"
-          />
-        </div>
-
-        {/* Separador dibujado */}
-        <div className="border-t-4 border-black border-dashed opacity-20 my-6"></div>
-
-        {/* Botón Crear Sala */}
-        <button 
-          onClick={crearSala}
-          className="w-full bg-green-400 hover:bg-green-300 text-black border-4 border-black py-4 rounded-xl font-black text-xl uppercase tracking-wider shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
-        >
-          Crear Nueva Sala
-        </button>
-
-        <div className="relative flex items-center justify-center py-2">
-            <span className="bg-white px-3 text-black font-bold text-sm border-2 border-black rounded-full z-10">O ENTRA A UNA</span>
-            <div className="absolute w-full border-b-2 border-black opacity-20"></div>
-        </div>
-
-        {/* Sección Unirse */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <input 
-            type="text" 
-            value={salaId}
-            onChange={(e) => setSalaId(e.target.value)}
-            className="w-full sm:w-2/3 p-3 rounded-xl bg-gray-50 border-4 border-black text-center uppercase font-mono text-lg font-bold placeholder:text-gray-400 focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
-            placeholder="CÓDIGO"
-            maxLength={4}
-          />
-          <button 
-            onClick={unirseSala}
-            className="w-full sm:w-1/3 bg-blue-400 hover:bg-blue-300 text-black border-4 border-black rounded-xl font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all py-3 sm:py-0"
-          >
-            Entrar
-          </button>
-        </div>
-
+      {/* Input Nombre */}
+      <div className="w-full space-y-1">
+        <label className="block text-sm font-black text-black uppercase ml-1">
+          Tu Nombre
+        </label>
+        <input 
+          type="text" 
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          className="w-full p-3 rounded-xl bg-gray-100 border-4 border-black text-black font-bold focus:outline-none focus:bg-white text-lg placeholder:text-gray-400"
+          placeholder="Ej: Pepe"
+        />
       </div>
+
+      <div className="w-full border-t-2 border-dashed border-gray-300"></div>
+
+      {/* Botón Crear */}
+      <button 
+        onClick={crearSala}
+        className="w-full bg-green-400 hover:bg-green-300 text-black border-4 border-black py-3 rounded-xl font-black text-lg uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+      >
+        Crear Sala
+      </button>
+
+      <div className="relative flex items-center justify-center w-full py-1">
+          <span className="bg-white px-2 text-gray-400 font-bold text-xs">O entra a una</span>
+      </div>
+
+      {/* Unirse */}
+      <div className="flex w-full gap-2">
+        <input 
+          type="text" 
+          value={salaId}
+          onChange={(e) => setSalaId(e.target.value)}
+          className="w-2/3 p-3 rounded-xl bg-gray-100 border-4 border-black text-center font-black text-lg uppercase placeholder:text-gray-400 focus:outline-none"
+          placeholder="CÓDIGO"
+          maxLength={4}
+        />
+        <button 
+          onClick={unirseSala}
+          className="w-1/3 bg-blue-400 hover:bg-blue-300 text-black border-4 border-black rounded-xl font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all text-sm"
+        >
+          Entrar
+        </button>
+      </div>
+
     </div>
   );
 }
