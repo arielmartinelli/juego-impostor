@@ -7,22 +7,41 @@ import { ref, onValue, update, remove } from "firebase/database";
 
 // Lugares posibles para el juego
 const PALABRAS = [
-  "Hospital", "Playa", "Escuela", "Submarino", "Estación Espacial", 
-  "Cine", "Supermercado", "Banco", "Avión", "Circo", 
-  "Cementerio", "Castillo Medieval", "Pirámide de Egipto", "Polo Norte", "Cárcel", 
-  "Gimnasio", "Biblioteca", "Restaurante de Sushi", "Volcán", "Parque de Diversiones",
-  "Microondas", "Sartén", "Inodoro", "Guitarra", "Computadora", 
-  "Zapato", "Reloj", "Paraguas", "Cepillo de Dientes", "Control Remoto", 
-  "Papel Higiénico", "Espejo", "Licuadora", "Escoba", "Almohada", 
-  "Bicicleta", "Cuchara", "Llaves", "Calcetín", "Gafas de Sol",
-  "Lionel Messi", "Shakira", "Bob Esponja", "Spider-Man", "Batman", 
-  "Mickey Mouse", "Cristiano Ronaldo", "Harry Potter", "Goku", "Taylor Swift", 
-  "La Roca", "Barbie", "Mario Bros", "El Chavo del 8", "Darth Vader", 
-  "Pikachu", "Iron Man", "Bad Bunny", "Homero Simpson", "Will Smith",
-  "Jirafa", "Elefante", "Tiburón", "Gato", "Perro", 
-  "Pingüino", "T-Rex", "León", "Gallina", "Mosquito", 
-  "Canguro", "Oso Panda", "Delfín", "Cocodrilo", "Murciélago", 
-  "Unicornio", "Hormiga", "Ballena", "Tortuga", "Lobo"
+  "Museo", "Zoológico", "Casino", "Farmacia", "Iglesia",
+
+"Aeropuerto", "Granja", "Discoteca", "Estadio", "Peluquería",
+
+"Sauna", "Teatro", "Taller Mecánico", "Panadería", "Cueva",
+
+"Isla Desierta", "Laboratorio", "Mansión", "Selva", "Desierto",
+
+"Puente", "Torre Eiffel", "Estatua de la Libertad", "Coliseo Romano", "Casa Blanca", "Teléfono", "Lápiz", "Mochila", "Anillo", "Sombrero",
+
+"Tijeras", "Martillo", "Botella", "Libro", "Silla",
+
+"Mesa", "Cama", "Televisor", "Automóvil", "Auriculares",
+
+"Globo", "Pelota", "Piano", "Billetera", "Cámara",
+
+"Linterna", "Escalera", "Taza", "Vela", "Mapa", "Superman", "Mujer Maravilla", "Deadpool", "Thor", "Hulk",
+
+"Yoda", "Elsa", "Buzz Lightyear", "Woody", "Shrek",
+
+"Minion", "Michael Jackson", "Madonna", "Elon Musk", "Billie Eilish",
+
+"Papa Francisco", "Diego Maradona", "Neymar", "Kylian Mbappé", "Sherlock Holmes",
+
+"Drácula", "Frankenstein", "Tarzán", "La Sirenita", "Papá Noel", "Tigre", "Mono", "Cebra", "Hipopótamo", "Rinoceronte",
+
+"Águila", "Loro", "Búho", "Serpiente", "Rana",
+
+"Mariposa", "Araña", "Pulpo", "Cangrejo", "Estrella de Mar",
+
+"Caballo", "Vaca", "Cerdo", "Oveja", "Pato",
+
+"Ratón", "Hámster", "Gorila", "Camello", "Koala", "Mirtha Legrand", "Ricardo Darín", "Susana Giménez", "Guillermo Francella", "Manu Ginóbili",
+
+"Charly García", "Carlos Gardel", "Bizarrap", "Emiliano 'Dibu' Martínez", "Tini Stoessel"
 ];
 
 export default function JuegoPage() {
