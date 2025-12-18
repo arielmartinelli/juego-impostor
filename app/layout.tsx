@@ -25,35 +25,39 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full h-dvh flex flex-col items-center justify-center p-2 sm:p-4`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full min-h-screen flex flex-col items-center justify-center p-4`}
       >
-        {/* HEADER COMPACTO: Se encoge si la pantalla es chica */}
-        <header className="mb-2 sm:mb-4 shrink-0 z-20">
-          <div className="bg-yellow-400 text-black border-4 border-black px-6 py-2 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter uppercase">
+        {/* HEADER */}
+        <header className="mb-6 z-20 hover:scale-105 transition-transform duration-200">
+          <div className="bg-yellow-400 text-black border-4 border-black px-8 py-3 rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] rotate-1">
+            <h1 className="text-3xl md:text-5xl font-black tracking-tighter uppercase drop-shadow-sm">
               EL IMPOSTOR
             </h1>
           </div>
         </header>
 
-        {/* CONTENEDOR TABLERO: Ocupa todo el espacio restante (flex-1) pero con límite */}
-        <main className="game-board-container w-full max-w-md h-full max-h-[85vh] p-4 relative">
+        {/* CONTENEDOR TABLERO (CAMBIOS AQUÍ) 
+            1. Quitamos h-full y max-h-[85vh]
+            2. Ponemos h-auto para que se encoja
+            3. Añadimos min-h-[300px] para que no sea diminuto
+        */}
+        <main className="game-board-container w-full max-w-sm md:max-w-md h-auto min-h-[300px] relative transition-all duration-300">
             
-            {/* Tornillos decorativos (más pequeños) */}
-            <div className="absolute top-2 left-2 w-2 h-2 rounded-full border border-black bg-gray-300"></div>
-            <div className="absolute top-2 right-2 w-2 h-2 rounded-full border border-black bg-gray-300"></div>
-            <div className="absolute bottom-2 left-2 w-2 h-2 rounded-full border border-black bg-gray-300"></div>
-            <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full border border-black bg-gray-300"></div>
+            {/* Tornillos decorativos */}
+            <div className="absolute top-3 left-3 w-3 h-3 rounded-full border-2 border-black bg-gray-200 shadow-sm z-20"></div>
+            <div className="absolute top-3 right-3 w-3 h-3 rounded-full border-2 border-black bg-gray-200 shadow-sm z-20"></div>
+            <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full border-2 border-black bg-gray-200 shadow-sm z-20"></div>
+            <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full border-2 border-black bg-gray-200 shadow-sm z-20"></div>
 
-            {/* Contenido con scroll interno SOLO si es absolutamente necesario */}
-            <div className="w-full h-full relative z-10 flex flex-col overflow-y-auto no-scrollbar">
+            {/* Contenido con padding generoso */}
+            <div className="w-full h-full relative z-10 p-6 md:p-8 flex flex-col justify-center">
               {children}
             </div>
 
         </main>
 
-        <footer className="mt-2 text-black font-bold opacity-60 text-[10px] shrink-0">
-           v3.0 • Compact Edition
+        <footer className="mt-6 text-black/70 font-bold text-xs tracking-widest bg-white/50 px-3 py-1 rounded-full border border-black/10">
+           v3.1 • Compact Edition
         </footer>
 
       </body>
