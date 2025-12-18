@@ -35,55 +35,52 @@ export default function Home() {
   return (
     <div className="flex flex-col w-full space-y-6">
       
-      {/* Input Nombre */}
-      <div className="space-y-2">
-        <label className="block text-sm font-black text-black uppercase tracking-wider ml-1">
-          Tu Nickname
+      {/* SECCIÓN NOMBRE */}
+      <div className="space-y-3">
+        <label className="block text-lg font-black text-black uppercase tracking-wider ml-1">
+          Tu Nombre
         </label>
+        {/* Input GRANDE: text-xl y p-4 */}
         <input 
           type="text" 
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          className="w-full p-4 rounded-xl bg-gray-50 border-4 border-black text-black font-black text-xl focus:outline-none focus:bg-yellow-50 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all placeholder:text-gray-300"
-          placeholder="Ej: PEPE"
+          className="w-full p-4 rounded-xl bg-gray-50 border-4 border-black text-black font-bold text-xl focus:outline-none focus:bg-yellow-50 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all placeholder:text-gray-300"
+          placeholder="Ej: ALEJO"
           maxLength={12}
         />
       </div>
 
-      {/* Separador visual */}
-      <div className="relative py-2">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t-4 border-black border-dashed opacity-20"></div>
-        </div>
-      </div>
+      <div className="border-t-4 border-black border-dashed opacity-20 my-2"></div>
 
-      {/* Botón Crear */}
+      {/* BOTÓN CREAR GRANDE */}
       <button 
         onClick={crearSala}
-        className="group relative w-full bg-green-400 hover:bg-green-300 text-black border-4 border-black py-4 rounded-xl font-black text-xl uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
+        className="w-full bg-green-400 hover:bg-green-300 text-black border-4 border-black py-4 rounded-xl font-black text-xl uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all"
       >
-        <span className="relative z-10">Crear Sala</span>
+        Crear Sala Nueva
       </button>
 
-      <div className="flex items-center justify-center">
-          <span className="bg-white px-3 text-xs font-black text-gray-400 uppercase tracking-widest border-2 border-gray-200 rounded-full py-1">
-            - O entra a una -
+      {/* Separador */}
+      <div className="flex items-center justify-center py-2">
+          <span className="bg-white px-4 text-sm font-black text-gray-400 uppercase tracking-widest border-2 border-gray-200 rounded-full py-1">
+            O únete a una
           </span>
       </div>
 
-      {/* Unirse */}
-      <div className="flex w-full gap-3">
+      {/* SECCIÓN UNIRSE */}
+      <div className="flex flex-col sm:flex-row gap-3">
         <input 
           type="text" 
           value={salaId}
           onChange={(e) => setSalaId(e.target.value)}
-          className="w-2/3 p-3 rounded-xl bg-gray-50 border-4 border-black text-center font-black text-xl uppercase placeholder:text-gray-300 focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+          className="w-full sm:w-2/3 p-4 rounded-xl bg-gray-50 border-4 border-black text-center font-black text-xl uppercase placeholder:text-gray-300 focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
           placeholder="CÓDIGO"
           maxLength={4}
         />
         <button 
           onClick={unirseSala}
-          className="w-1/3 bg-blue-400 hover:bg-blue-300 text-black border-4 border-black rounded-xl font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all text-sm leading-tight flex items-center justify-center"
+          className="w-full sm:w-1/3 bg-blue-400 hover:bg-blue-300 text-black border-4 border-black rounded-xl font-black text-lg uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-1 active:translate-y-1 transition-all py-4 sm:py-0"
         >
           Entrar
         </button>
