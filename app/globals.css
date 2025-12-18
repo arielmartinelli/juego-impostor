@@ -1,61 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  /* Colores del "Tablero" */
-  --background: #4ade80; /* Un verde estilo tapete de cartas o fieltro */
-  --foreground: #171717;
+  /* Fondo gris muy suave */
+  --background: #f3f4f6;
+  --foreground: #111827;
   --card-bg: #ffffff;
-  --border-color: #000000;
+  --border-color: #e5e7eb;
+  --primary: #6366f1; /* Índigo */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: system-ui, -apple-system, sans-serif;
 }
-
-/* Mantenemos el soporte para modo oscuro si lo deseas, pero para un juego 
-   caricaturesco, suele ser mejor forzar colores vibrantes fijos. 
-   He dejado esto comentado por si prefieres ignorar el modo oscuro del sistema. */
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} 
-*/
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  
-  /* Patrón de puntos para que parezca una mesa de juego */
-  background-image: radial-gradient(#22c55e 2px, transparent 2px);
-  background-size: 30px 30px;
+  font-family: var(--font-sans);
   min-height: 100vh;
-  overflow-x: hidden; /* Evitar scroll lateral */
+  /* Sin patrones, solo limpieza */
 }
 
-/* CLASES DE UTILIDAD PARA EL ESTILO "CARTOON" */
-
-/* El contenedor principal del juego (El Tablero) */
+/* Contenedor estilo "Tarjeta Flotante" */
 .game-board-container {
   background-color: var(--card-bg);
-  border: 4px solid var(--border-color); /* Borde negro grueso */
-  border-radius: 24px; /* Bordes muy redondos */
-  /* Sombra dura (sin blur) para efecto 3D caricatura */
-  box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); 
+  border: 1px solid white;
+  border-radius: 24px;
+  /* Sombra difusa y suave (Elevación) */
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Clase opcional para botones si quieres usarlos dentro de tu juego */
-.btn-cartoon {
-  border: 3px solid black;
-  box-shadow: 4px 4px 0px 0px black;
-  transition: all 0.1s;
+/* Elementos internos */
+button {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
-.btn-cartoon:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px 0px black;
+button:active {
+  transform: scale(0.98);
 }
