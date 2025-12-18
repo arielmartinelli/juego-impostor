@@ -12,10 +12,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// AQUÍ CONFIGURAMOS EL TÍTULO Y LA FOTO DE WHATSAPP
 export const metadata: Metadata = {
+  // Cambia esto por tu link real cuando lo tengas, ej: 'https://juego-impostor.vercel.app'
   metadataBase: new URL('https://juego-impostor.vercel.app'), 
-  title: "IMPOSTOR ARCADE",
-  description: "Descubre al glitch en el sistema.",
+  title: "El Impostor - Juega con amigos",
+  description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
+  openGraph: {
+    title: "El Impostor - Juega con amigos",
+    description: "Entra a la sala, descubre al mentiroso y vota para ganar.",
+    // Next.js buscará automáticamente tu archivo opengraph-image.png
+  },
 };
 
 export default function RootLayout({
@@ -28,31 +35,33 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col items-center justify-center min-h-screen p-4`}
       >
-        {/* HEADER ARCADE */}
-        <header className="mb-8 z-20 text-center">
-          <h1 className="text-5xl md:text-6xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 drop-shadow-[0_0_10px_rgba(255,0,255,0.8)] italic transform -skew-x-12">
-            IMPOSTOR
-          </h1>
-          <p className="text-cyan-400 font-mono text-xs tracking-[0.5em] mt-2 animate-pulse">
-            SYSTEM READY
-          </p>
+        {/* HEADER: Título ÚNICO del juego */}
+        <header className="mb-6 z-20">
+          <div className="bg-yellow-400 text-black border-4 border-black px-10 py-4 rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transform hover:-translate-y-1 transition-transform">
+            <h1 className="text-4xl font-black tracking-tighter uppercase">
+              EL IMPOSTOR
+            </h1>
+          </div>
         </header>
 
-        {/* CONTENEDOR TIPO PANTALLA CRT */}
-        <main className="arcade-container w-full max-w-md md:max-w-lg lg:max-w-2xl p-6 md:p-8 relative">
+        {/* CONTENEDOR TIPO TABLERO */}
+        <main className="game-board-container w-full max-w-md md:max-w-lg lg:max-w-2xl p-8 relative bg-white border-4 border-black rounded-3xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             
-            {/* Decoración "Scanline" sutil */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 pointer-events-none bg-[length:100%_2px,3px_100%] opacity-20"></div>
+            {/* Tornillos decorativos */}
+            <div className="absolute top-4 left-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
+            <div className="absolute top-4 right-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
+            <div className="absolute bottom-4 left-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
+            <div className="absolute bottom-4 right-4 w-3 h-3 rounded-full border-2 border-black bg-gray-300"></div>
 
-            {/* CONTENIDO DEL JUEGO */}
-            <div className="relative z-10 w-full h-full">
+            {/* AQUÍ SE MUESTRA TU JUEGO */}
+            <div className="w-full h-full relative z-10">
               {children}
             </div>
 
         </main>
 
-        <footer className="mt-8 text-cyan-600 font-mono text-[10px] tracking-widest">
-           INSERT COIN TO PLAY • v2.0 ARCADE
+        <footer className="mt-8 text-black font-bold opacity-60 text-xs">
+           v1.0 • Edición Tablero
         </footer>
 
       </body>
