@@ -1,45 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  /* Fondo gris muy suave */
-  --background: #f3f4f6;
-  --foreground: #111827;
-  --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --primary: #6366f1; /* Índigo */
+  /* Paleta Arcade / Neon */
+  --bg-dark: #09090b;       /* Negro casi puro */
+  --neon-pink: #ff00ff;
+  --neon-blue: #00ffff;
+  --neon-green: #39ff14;
+  --neon-yellow: #fff01f;
+  --glass-bg: rgba(20, 20, 20, 0.9);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: var(--font-mono), monospace; /* Forzamos fuente tipo terminal */
+  
+  /* Efecto Grilla Retro (Grid) */
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  
   min-height: 100vh;
-  /* Sin patrones, solo limpieza */
+  overflow-x: hidden;
 }
 
-/* Contenedor estilo "Tarjeta Flotante" */
-.game-board-container {
-  background-color: var(--card-bg);
-  border: 1px solid white;
-  border-radius: 24px;
-  /* Sombra difusa y suave (Elevación) */
-  box-shadow: 
-    0 10px 15px -3px rgba(0, 0, 0, 0.1), 
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+/* UTILIDADES ARCADE */
+
+/* Contenedor principal estilo pantalla CRT */
+.arcade-container {
+  background-color: #000000;
+  border: 2px solid var(--neon-blue);
+  border-radius: 10px;
+  box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px rgba(0, 255, 255, 0.2);
+  position: relative;
 }
 
-/* Elementos internos */
-button {
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.2s ease;
+/* Efecto de texto brillante */
+.text-glow {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
 }
-button:active {
-  transform: scale(0.98);
+
+/* Botones Neon */
+.btn-arcade {
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-arcade:active {
+  transform: scale(0.95);
+}
+
+/* Animación de parpadeo suave */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; text-shadow: 0 0 10px currentColor; }
+  50% { opacity: 0.8; text-shadow: 0 0 2px currentColor; }
+}
+
+.animate-neon {
+  animation: pulse-glow 2s infinite;
 }
